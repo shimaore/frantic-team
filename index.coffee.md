@@ -99,6 +99,8 @@ Update the replication document.
       for own k,v of model
         doc[k] = v
 
+      debug 'Creating replication', doc
+
       yield replicator
         .put doc
         .catch (error) ->
