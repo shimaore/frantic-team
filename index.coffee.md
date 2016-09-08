@@ -55,7 +55,7 @@ Let the callback add any field they'd like.
 Note: the callback might also prevent replication if it throws. This is intentional.
 Note: the callback might return a Promise. Or not. We'll deal with both.
 
-      yield extensions? model
+      yield extensions_cb? model
 
 Create a (somewhat) unique ID for the document.
 
