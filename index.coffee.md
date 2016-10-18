@@ -71,6 +71,8 @@ When creating documents with different IDs, well, use the computed ID.
 
 Let's get started.
 
+      debug "Going to inject", model
+
 Create the target database if it doesn't already exist.
 
       target = new PouchDB "#{prefix_target}/#{name}", skip_setup: false
