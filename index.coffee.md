@@ -119,6 +119,18 @@ Report all other errors.
           debug "Replication from #{model.source} failed."
           Promise.reject error
 
+Give CouchDB some time to breath.
+
+      yield delay 2000
+
+Log the status of the replicator
+
+      doc = yield replicator
+        .get model._id
+        .catch (error) -> {}
+
+      debug 'Replication status', doc
+
 Toolbox
 =======
 
