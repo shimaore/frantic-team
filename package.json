@@ -1,6 +1,6 @@
 {
   "name": "frantic-team",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Inject replication documents in CouchDB",
   "main": "index.js",
   "scripts": {
