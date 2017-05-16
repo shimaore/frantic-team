@@ -140,4 +140,4 @@ Toolbox
     crypto = require 'crypto'
     url = require 'url'
     pkg = require './package.json'
-    debug = (require 'debug') pkg.name
+    debug = (require 'tangible') pkg.name
