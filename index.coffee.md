@@ -134,7 +134,9 @@ Log the status of the replicator
 Toolbox
 =======
 
-    PouchDB = require 'pouchdb'
+    PouchDB = require 'pouchdb-core'
+      .plugin require 'pouchdb-adapter-http'
+      .plugin require 'pouchdb-replication'
 
     delay = require 'timeout-as-promise'
     crypto = require 'crypto'

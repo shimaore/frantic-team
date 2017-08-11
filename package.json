@@ -30,7 +30,9 @@
     "mocha": "^3.2.0"
   },
   "dependencies": {
-    "pouchdb": "^6.1.0",
+    "pouchdb-adapter-http": "^6.3.4",
+    "pouchdb-core": "^6.3.4",
+    "pouchdb-replication": "^6.3.4",
     "seem": "^2.0.0",
     "tangible": "^1.2.2",
     "timeout-as-promise": "^1.0.0"
