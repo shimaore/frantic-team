@@ -77,6 +77,7 @@ Create the target database if it doesn't already exist.
 
       target = new PouchDB "#{prefix_target}/#{name}", skip_setup: false
       yield target.info()
+      target.close()
 
 When using the deletion method, first delete the existing replication document.
 
@@ -130,6 +131,8 @@ Log the status of the replicator
         .catch (error) -> {}
 
       debug 'Replication status', doc
+      replicator.close()
+      return
 
 Toolbox
 =======
