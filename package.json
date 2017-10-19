@@ -34,7 +34,7 @@
     "pouchdb-core": "^6.3.4",
     "pouchdb-replication": "^6.3.4",
     "seem": "^2.0.0",
-    "tangible": "^1.7.0",
+    "tangible": "^1.9.0",
     "timeout-as-promise": "^1.0.0"
   }
 }
