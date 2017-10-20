@@ -137,8 +137,7 @@ Log the status of the replicator
 Toolbox
 =======
 
-    PouchDB = require 'shimaore-pouchdb-core'
-      .plugin require 'pouchdb-adapter-http'
+    PouchDB = require 'ccnq4-pouchdb'
       .plugin require 'pouchdb-replication'
 
     delay = require 'timeout-as-promise'

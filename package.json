@@ -30,8 +30,7 @@
     "mocha": "^3.5.0"
   },
   "dependencies": {
-    "pouchdb-adapter-http": "^6.3.4",
-    "shimaore-pouchdb-core": "^6.3.4",
+    "ccnq4-pouchdb": "^1.0.0",
     "pouchdb-replication": "^6.3.4",
     "seem": "^2.0.0",
     "tangible": "^1.9.0",
