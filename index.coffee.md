@@ -109,7 +109,7 @@ Update the replication document.
       yield replicator
         .put doc
         .catch (error) ->
-          debug "put #{model._id}: #{error.stack ? error}"
+          debug.error "put #{model._id}", error
 
 Catch 403 errors as they indicate the status was updated by CouchDB (too fast for us to see).
 
@@ -119,7 +119,7 @@ Catch 403 errors as they indicate the status was updated by CouchDB (too fast fo
 
 Report all other errors.
 
-          debug "Replication from #{model.source} failed."
+          debug.error "Replication from #{model.source} failed.", error
           Promise.reject error
 
 Give CouchDB some time to breath.
