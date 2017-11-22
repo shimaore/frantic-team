@@ -24,10 +24,10 @@
   },
   "homepage": "https://github.com/shimaore/frantic-team",
   "devDependencies": {
-    "chai": "^4.1.1",
+    "chai": "^4.1.2",
     "coffee-coverage": "^2.0.1",
     "coffee-script": "^1.12.7",
-    "mocha": "^3.5.0"
+    "mocha": "^4.0.1"
   },
   "dependencies": {
     "ccnq4-pouchdb": "^1.0.0",
