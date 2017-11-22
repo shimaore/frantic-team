@@ -3,6 +3,8 @@
 
     seem = require 'seem'
 
+    delay = 2000
+
 `replicate(source,target,name,extensions)`: replicate database `name` from `source` to `target` (all strings) by creating a replication `pull` document on the target.
 Before submission, the replication document is passed to the (optional) `extensions` callback.
 Returns a Promise. Make sure you `catch()` any errors.
@@ -89,7 +91,7 @@ When using the deletion method, first delete the existing replication document.
 
 Give CouchDB some time to breath.
 
-      yield delay 2000
+      yield sleep delay
 
 Update the replication document.
 
@@ -122,7 +124,7 @@ Report all other errors.
 
 Give CouchDB some time to breath.
 
-      yield delay 2000
+      yield sleep delay
 
 Log the status of the replicator
 
@@ -140,7 +142,7 @@ Toolbox
     PouchDB = require 'ccnq4-pouchdb'
       .plugin require 'pouchdb-replication'
 
-    delay = require 'timeout-as-promise'
+    sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
     crypto = require 'crypto'
     url = require 'url'
     pkg = require './package.json'
