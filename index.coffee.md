@@ -27,6 +27,7 @@ The one thing we know doesn't work is using the same document ID for documents t
 Deleting the replication document should also force the replicator to stop the existing replication and start a new process.
 
       source = url.parse prefix_source
+      target = url.parse prefix_target
       comment = "replication of #{name} from #{source.host}"
       debug "Going to start #{comment}."
 
@@ -35,22 +36,32 @@ I'm creating a `model` document.. just in case I'd have to revert to manually pu
       model =
         comment: comment
         continuous: true
-        target: name
 
-Remove authorization from the source, because...
+Remove authorization from the source and target, because...
 
+        target:
+          url: url.format
+            protocol: target.protocol
+            host: target.host
+            pathname: name
         source:
           url: url.format
             protocol: source.protocol
             host: source.host
             pathname: name
 
-...even with CouchDB 1.6.1 we still have the issue with CouchDB not properly managing authorization headers when a username and password are provided in the original URI that contains "special" characters (like `@` or space). So let's handle it ourselves.
+...even with CouchDB ~~1.6.1~~ 2.1.1 we still have the issue with CouchDB not properly managing authorization headers when a username and password are provided in the original URI that contains "special" characters (like `@` or space). So let's handle it ourselves.
 
       if source.auth?
         auth = (new Buffer source.auth).toString 'base64'
         debug "Encoded `#{source.auth}` of `#{prefix_source}` as `#{auth}`."
         model.source.headers =
+          Authorization: "Basic #{auth}"
+
+      if target.auth?
+        auth = (new Buffer target.auth).toString 'base64'
+        debug "Encoded `#{target.auth}` of `#{prefix_target}` as `#{auth}`."
+        model.target.headers =
           Authorization: "Basic #{auth}"
 
 Let the callback add any field they'd like.
