@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "ccnq4-pouchdb": "^1.0.0",
-    "pouchdb-replication": "^6.3.4",
+    "pouchdb-replication": "^6.4.1",
     "seem": "^2.0.0",
     "tangible": "^1.9.0"
   }
