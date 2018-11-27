@@ -110,7 +110,7 @@ When using the deletion method, first delete the existing replication document.
         {_rev} = await replicator
           .get model._id
           .catch (error) -> {}
-        await replicator.delete id:model._id, rev:_rev if _rev?
+        await replicator.delete {_id:model._id, _rev} if _rev?
 
 Give CouchDB some time to breath.
 
