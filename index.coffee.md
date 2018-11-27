@@ -1,18 +1,16 @@
 `replicate`
 -----------
 
-    seem = require 'seem'
-
     delay = 2000
 
 `replicate(source,target,name,extensions)`: replicate database `name` from `source` to `target` (all strings) by creating a replication `pull` document on the target.
 Before submission, the replication document is passed to the (optional) `extensions` callback.
 Returns a Promise. Make sure you `catch()` any errors.
 
-    module.exports = replicate = seem (prefix_source,prefix_target,name,extensions_cb) ->
+    module.exports = replicate = (prefix_source,prefix_target,name,extensions_cb) ->
 
       replicator_db = "#{prefix_target}/_replicator"
-      replicator = new PouchDB replicator_db, skip_setup: true
+      replicator = new CouchDB replicator_db
 
 Here we have multiple solutions, so I'll test them:
 - either delete any existing document with the same name (this should cancel the replication, based on the CouchDB docs), and recreate a new one;
@@ -53,13 +51,13 @@ Remove authorization from the source and target, because...
 ...even with CouchDB ~~1.6.1~~ 2.1.1 we still have the issue with CouchDB not properly managing authorization headers when a username and password are provided in the original URI that contains "special" characters (like `@` or space). So let's handle it ourselves.
 
       if source.auth?
-        auth = (new Buffer source.auth).toString 'base64'
+        auth = (Buffer.from source.auth).toString 'base64'
         debug "Encoded `#{source.auth}` of `#{prefix_source}` as `#{auth}`."
         model.source.headers =
           Authorization: "Basic #{auth}"
 
       if target.auth?
-        auth = (new Buffer target.auth).toString 'base64'
+        auth = (Buffer.from target.auth).toString 'base64'
         debug "Encoded `#{target.auth}` of `#{prefix_target}` as `#{auth}`."
         model.target.headers =
           Authorization: "Basic #{auth}"
@@ -68,7 +66,7 @@ Let the callback add any field they'd like.
 Note: the callback might also prevent replication if it throws. This is intentional.
 Note: the callback might return a Promise. Or not. We'll deal with both.
 
-      yield extensions_cb? model
+      await extensions_cb? model
 
 Create a (somewhat) unique ID for the document.
 
@@ -88,25 +86,25 @@ Let's get started.
 
 Create the target database if it doesn't already exist.
 
-      target = new PouchDB "#{prefix_target}/#{name}", skip_setup: false
-      yield target.info()
-      target.close()
+      target = new CouchDB "#{prefix_target}/#{name}"
+      await target.create()
+      target = null
 
 When using the deletion method, first delete the existing replication document.
 
       if use_delete
-        {_rev} = yield replicator
+        {_rev} = await replicator
           .get model._id
           .catch (error) -> {}
-        yield replicator.remove model._id, _rev if _rev?
+        await replicator.delete id:model._id, rev:_rev if _rev?
 
 Give CouchDB some time to breath.
 
-      yield sleep delay
+      await sleep delay
 
 Update the replication document.
 
-      {_rev} = yield replicator
+      {_rev} = await replicator
         .get model._id
         .catch (error) -> {}
 
@@ -117,7 +115,7 @@ Update the replication document.
 
       debug 'Creating replication', doc
 
-      yield replicator
+      await replicator
         .put doc
         .catch (error) ->
           debug.error "put #{model._id}", error
@@ -135,23 +133,22 @@ Report all other errors.
 
 Give CouchDB some time to breath.
 
-      yield sleep delay
+      await sleep delay
 
 Log the status of the replicator
 
-      doc = yield replicator
+      doc = await replicator
         .get model._id
         .catch (error) -> {}
 
       debug 'Replication status', doc
-      replicator.close()
+      replicator = null
       return
 
 Toolbox
 =======
 
-    PouchDB = require 'ccnq4-pouchdb'
-      .plugin require 'pouchdb-replication'
+    CouchDB = require 'most-couchdb'
 
     sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
     crypto = require 'crypto'

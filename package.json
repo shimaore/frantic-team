@@ -4,13 +4,14 @@
   "description": "Inject replication documents in CouchDB",
   "main": "index.js",
   "scripts": {
-    "prepublishOnly": "npm install --only=dev && rm package-lock.json && coffee --no-header -c -M *.coffee.md",
-    "pretest": "npm install",
-    "test": "mocha"
+    "prepublishOnly": "npm run build",
+    "build": "npm install --only=dev && rm package-lock.json && coffee --no-header -c -M *.coffee.md",
+    "pretest": "npm run build && coffee -c test/*.coffee.md",
+    "test": "nyc mocha"
   },
   "repository": {
     "type": "git",
-    "url": "github.com/shimaore/frantic-team"
+    "url": "gitlab.com/shimaore/frantic-team"
   },
   "keywords": [
     "CouchDB",
@@ -20,19 +21,17 @@
   "author": "Stéphane Alnet <stephane@shimaore.net> (https://stephane.shimaore.net/)",
   "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/shimaore/frantic-team/issues"
+    "url": "https://gitlab.com/shimaore/frantic-team/issues"
   },
-  "homepage": "https://github.com/shimaore/frantic-team",
+  "homepage": "https://gitlab.com/shimaore/frantic-team",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "coffee-coverage": "^2.0.1",
-    "coffee-script": "^1.12.7",
-    "mocha": "^4.0.1"
+    "chai": "^4.2.0",
+    "coffeescript": "^2.3.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
   },
   "dependencies": {
-    "ccnq4-pouchdb": "^1.0.0",
-    "pouchdb-replication": "^6.4.1",
-    "seem": "^2.0.0",
-    "tangible": "^1.9.0"
+    "most-couchdb": "^1.5.0",
+    "tangible": "^3.0.0"
   }
 }
