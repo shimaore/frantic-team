@@ -1,7 +1,9 @@
     describe 'A basic replication', ->
       replicate = require '..'
+      prefix = 'http://admin:password@couchdb:5984'
       CouchDB = require 'most-couchdb'
       it 'should run', ->
-        a = new CouchDB 'http://admin:password@couchdb:5984/example'
-        await a.create()
-        await replicate 'http://admin:password@couchdb:5984', 'http://admin:password@couchdb:5984', 'example'
+        @timeout 8000
+        await (new CouchDB "#{prefix}/_replicator").create()
+        await (new CouchDB "#{prefix}/example").create()
+        await replicate prefix, prefix, 'example'

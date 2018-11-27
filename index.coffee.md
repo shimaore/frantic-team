@@ -88,6 +88,20 @@ Create the target database if it doesn't already exist.
 
       target = new CouchDB "#{prefix_target}/#{name}"
       await target.create()
+        .catch (error) ->
+          debug.error "create #{name}", error
+
+Catch 412 errors as they indicate the database early exists.
+
+          if error.status? and error.status is 412
+            debug "Database already exists"
+            return
+
+Report all other errors.
+
+          debug.error "Creating database #{name} failed.", error
+          Promise.reject error
+
       target = null
 
 When using the deletion method, first delete the existing replication document.
