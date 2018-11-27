@@ -89,7 +89,6 @@ Create the target database if it doesn't already exist.
       target = new CouchDB "#{prefix_target}/#{name}"
       await target.create()
         .catch (error) ->
-          debug.error "create #{name}", error
 
 Catch 412 errors as they indicate the database early exists.
 
@@ -132,7 +131,6 @@ Update the replication document.
       await replicator
         .put doc
         .catch (error) ->
-          debug.error "put #{model._id}", error
 
 Catch 403 errors as they indicate the status was updated by CouchDB (too fast for us to see).
 
@@ -142,7 +140,7 @@ Catch 403 errors as they indicate the status was updated by CouchDB (too fast fo
 
 Report all other errors.
 
-          debug.error "Replication from #{model.source} failed.", error
+          debug.error "Replication from #{model.source} for #{model._id} failed.", error
           Promise.reject error
 
 Give CouchDB some time to breath.
