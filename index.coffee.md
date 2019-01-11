@@ -6,10 +6,11 @@
 `replicate(source,target,name,extensions)`: replicate database `name` from `source` to `target` (all strings) by creating a replication `pull` document on the target.
 Before submission, the replication document is passed to the (optional) `extensions` callback.
 Returns a Promise. Make sure you `catch()` any errors.
+An optional extra parameter might be used to name a distinct replicator database for storage (supported in CouchDB 2 and above).
 
-    module.exports = replicate = (prefix_source,prefix_target,name,extensions_cb) ->
+    module.exports = replicate = (prefix_source,prefix_target,name,extensions_cb,group_name = '') ->
 
-      replicator_db = "#{prefix_target}/_replicator"
+      replicator_db = "#{prefix_target}/#{group_name}_replicator"
       replicator = new CouchDB replicator_db
 
 Here we have multiple solutions, so I'll test them:
