@@ -26,7 +26,6 @@ The one thing we know doesn't work is using the same document ID for documents t
 Deleting the replication document should also force the replicator to stop the existing replication and start a new process.
 
       source = url.parse prefix_source
-      target = url.parse prefix_target
       comment = "replication of #{name} from #{source.host}"
       debug "Going to start #{comment}."
 
@@ -38,30 +37,8 @@ I'm creating a `model` document.. just in case I'd have to revert to manually pu
 
 Remove authorization from the source and target, because...
 
-        target:
-          url: url.format
-            protocol: target.protocol
-            host: target.host
-            pathname: name
-        source:
-          url: url.format
-            protocol: source.protocol
-            host: source.host
-            pathname: name
-
-...even with CouchDB ~~1.6.1~~ 2.1.1 we still have the issue with CouchDB not properly managing authorization headers when a username and password are provided in the original URI that contains "special" characters (like `@` or space). So let's handle it ourselves.
-
-      if source.auth?
-        auth = (Buffer.from source.auth).toString 'base64'
-        debug "Encoded `#{source.auth}` of `#{prefix_source}` as `#{auth}`."
-        model.source.headers =
-          Authorization: "Basic #{auth}"
-
-      if target.auth?
-        auth = (Buffer.from target.auth).toString 'base64'
-        debug "Encoded `#{target.auth}` of `#{prefix_target}` as `#{auth}`."
-        model.target.headers =
-          Authorization: "Basic #{auth}"
+        target: site prefix_target, name
+        source: site prefix_source, name
 
 Let the callback add any field they'd like.
 Note: the callback might also prevent replication if it throws. This is intentional.
@@ -165,6 +142,7 @@ Toolbox
 
     sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
     crypto = require 'crypto'
+    site = require 'frantic-site'
     url = require 'url'
     pkg = require './package.json'
     debug = (require 'tangible') pkg.name
