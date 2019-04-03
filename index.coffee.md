@@ -107,7 +107,7 @@ Update the replication document.
       debug 'Creating replication', doc
 
       await replicator
-        .put doc
+        .update doc
         .catch (error) ->
 
 Catch 403 errors as they indicate the status was updated by CouchDB (too fast for us to see).
@@ -138,7 +138,7 @@ Log the status of the replicator
 Toolbox
 =======
 
-    CouchDB = require 'most-couchdb'
+    CouchDB = require 'most-couchdb/with-update'
 
     sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
     crypto = require 'crypto'
